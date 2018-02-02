@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注册</title>
+    <style>
+        *{margin:0;
+        padding:0;
+        box-sizing: border-box;}
+        body{
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+        }
+        .form-wrapper{
+            min-width: 350px;
+        }
+        .form-wrapper .row{
+            margin: 10px 0;
+        }
+        .form-wrapper .row>lable{
+            display: inline-block;
+            width:4em;
+        }
+    </style>
+</head>
+<body>
+<div class="form-wrapper">
+    <h1>注册</h1>
+    <form id="RegisterForm" >
+        <div class="row">
+            <lable>邮箱</lable>
+            <input type="text" name="email">
+            <span class="error"></span>
+        </div>
+        <div class="row">
+            <lable>密码</lable>
+            <input type="password" name="password">
+            <span class="error"></span>
+        </div>
+          <div class="row">
+              <lable>确认密码</lable>
+              <input type="password" name="password_confirm">
+              <span class="error"></span>
+          </div>
+            <div class="row">
+                <input type="submit">
+            </div>
+
+    </form>
+</div>
+<script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+$('#RegisterForm').on('submit',(e) => {
+    e.preventDefault();
+    let hash = {};
+    let arg = ['email','password','password_confirm'];
+    arg.forEach((name) => {
+        let value = $('#RegisterForm').find(`[name= ${name}]`).val();
+        hash[name] = value;
+    })
+    $('#RegisterForm').find('.error').each((index,span) => {
+        $(span).text('');
+    })
+    if(hash['email'] === ''){
+        $('#RegisterForm').find('[name = "email"]').siblings('.error').text('请输入邮箱');
+        return
+    }
+     if(hash['password'] === ''){
+        $('#RegisterForm').find('[name = "password"]').siblings('.error').text('请输入密码');
+        return
+    }
+    if(hash['password_confirm'] === ''){
+        $('#RegisterForm').find('[name = "password_confirm"]').siblings('.error').text('请输入密码');
+        return
+    }
+    if(hash['password'] !== hash['password_confirm'] ){
+        $('#RegisterForm').find('[name = "password_confirm"]').siblings('.error').text('密码不匹配');
+        return
+    }
+    $.post('/register',hash).then((response) =>{console.log(response)},
+        (request) => {
+        let {errors} = request.responseJSON;
+        if(errors.email  &&  errors.email === 'invalid'){
+           $('#RegisterForm').find('[name = "email"]').siblings('.error').text('邮箱输错了');
+        }
+        })
+
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <style>
+        *{margin:0;
+            padding:0;
+            box-sizing: border-box;}
+        body{
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+        }
+        .form-wrapper{
+            min-width: 350px;
+        }
+        .form-wrapper .row{
+            margin: 10px 0;
+        }
+        .form-wrapper .row>lable{
+            display: inline-block;
+            width:4em;
+        }
+    </style>
+</head>
+<body>
+<div class="form-wrapper">
+    <h1>登录</h1>
+    <form id="loginForm" >
+        <div class="row">
+            <lable>邮箱</lable>
+            <input type="text" name="email">
+            <span class="error"></span>
+        </div>
+        <div class="row">
+            <lable>密码</lable>
+            <input type="password" name="password">
+            <span class="error"></span>
+        </div>
+
+        <div class="row">
+            <input type="submit">
+        </div>
+
+    </form>
+</div>
+
+<script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+    $('#loginForm').on('submit',(e) => {
+        e.preventDefault();
+        let hash = {};
+        let arg = ['email','password'];
+        arg.forEach((name) => {
+            let value = $('#loginForm').find(`[name= ${name}]`).val();
+            hash[name] = value;
+        })
+        $('#loginForm').find('.error').each((index,span) => {
+            $(span).text('');
+        })
+        if(hash['email'] === ''){
+            $('#loginForm').find('[name = "email"]').siblings('.error').text('请输入邮箱');
+            return
+        }
+        if(hash['password'] === ''){
+            $('#loginForm').find('[name = "password"]').siblings('.error').text('请输入密码');
+            return
+        }
+
+        $.post('/login',hash).then(() =>{window.location.href="/"},
+            () => {
+                alert("登录失败，请重新登录")
+            })
+
+    })
+</script>
+</body>
+</html>
