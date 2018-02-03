@@ -4,7 +4,7 @@ var url = require('url')
 var port = process.argv[2]
 
 if(!port){
-    console.log('请指定端口号好不啦？\nnode server.js 8888 这样不会吗？')
+    console.log('请指定端口号好不啦？')
     process.exit(1)
 }
 
@@ -17,9 +17,9 @@ var server = http.createServer(function(request, response){
     var query = parsedUrl.query
     var method = request.method
 
-    /******** 从这里开始看，上面不要看 ************/
+    /******** ************/
 
-    console.log('方方说：含查询字符串的路径\n' + pathWithQuery)
+    console.log('含查询字符串的路径\n' + pathWithQuery)
 
     if(path === '/register' && method ==='GET'){
         let string = fs.readFileSync('./register.html', 'utf8')
@@ -188,9 +188,9 @@ var server = http.createServer(function(request, response){
         response.end()
     }
 
-    /******** 代码结束，下面不要看 ************/
-})
 
+})
+/********  ************/
 function readBody(request){
     return new Promise((resolve,reject) => {
         let body = [];
@@ -204,4 +204,4 @@ function readBody(request){
 }
 
 server.listen(port)
-console.log('监听 ' + port + ' 成功\n请用在空中转体720度然后用电饭煲打开 http://localhost:' + port)
+console.log('监听 ' + port + ' 成功\n http://localhost:' + port)
